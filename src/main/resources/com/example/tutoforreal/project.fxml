@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="697.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.Controller">
    <children>
-      <Label fx:id="pageLabel" alignment="CENTER" layoutX="172.0" layoutY="27.0" prefHeight="65.0" prefWidth="299.0">
+      <Label fx:id="pageLabel" alignment="CENTER" layoutX="272.0" layoutY="14.0" prefHeight="65.0" prefWidth="299.0">
          <font>
             <Font size="22.0" />
          </font></Label>
-      <TableView fx:id="projectTableView" layoutX="238.0" layoutY="78.0" prefHeight="301.0" prefWidth="353.0" />
+      <TableView fx:id="projectTableView" layoutX="317.0" layoutY="79.0" prefHeight="301.0" prefWidth="348.0">
+         <columns>
+            <TableColumn fx:id="projetColumnId" prefWidth="40.0" text="ID" />
+            <TableColumn fx:id="projetColumnTitle" prefWidth="116.0" text="TITLE" />
+            <TableColumn fx:id="projetColumnDescription" prefWidth="191.0" text="DESCRIPTION" />
+         </columns>
+      </TableView>
+      <TextArea fx:id="newProjectDescription" layoutX="105.0" layoutY="123.0" prefHeight="200.0" prefWidth="149.0" />
+      <TextField fx:id="newProjectTitle" layoutX="105.0" layoutY="79.0" />
+      <Label layoutX="13.0" layoutY="81.0" prefHeight="21.0" prefWidth="75.0" text="Titre">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="13.0" layoutY="123.0" text="Description">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Button fx:id="createProjectButton" layoutX="152.0" layoutY="355.0" mnemonicParsing="false" onAction="#createProject" prefHeight="25.0" prefWidth="102.0" text="Create Project" />
    </children>
 </Pane>
