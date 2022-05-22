@@ -9,31 +9,52 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="697.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="872.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.Controller">
    <children>
-      <Label fx:id="pageLabel" alignment="CENTER" layoutX="272.0" layoutY="14.0" prefHeight="65.0" prefWidth="299.0">
+      <Label fx:id="listProjectLabel" alignment="CENTER" layoutX="492.0" layoutY="14.0" prefHeight="65.0" prefWidth="299.0" text="Liste de vos projets : ">
          <font>
             <Font size="22.0" />
          </font></Label>
-      <TableView fx:id="projectTableView" layoutX="317.0" layoutY="79.0" prefHeight="301.0" prefWidth="348.0">
+      <TableView fx:id="projectTableView" layoutX="492.0" layoutY="78.0" prefHeight="301.0" prefWidth="348.0">
          <columns>
             <TableColumn fx:id="projetColumnId" prefWidth="40.0" text="ID" />
             <TableColumn fx:id="projetColumnTitle" prefWidth="116.0" text="TITLE" />
             <TableColumn fx:id="projetColumnDescription" prefWidth="191.0" text="DESCRIPTION" />
          </columns>
       </TableView>
-      <TextArea fx:id="newProjectDescription" layoutX="105.0" layoutY="123.0" prefHeight="200.0" prefWidth="149.0" />
-      <TextField fx:id="newProjectTitle" layoutX="105.0" layoutY="79.0" />
-      <Label layoutX="13.0" layoutY="81.0" prefHeight="21.0" prefWidth="75.0" text="Titre">
+      <TextArea fx:id="newProjectDescription" layoutX="105.0" layoutY="270.0" prefHeight="65.0" prefWidth="149.0" />
+      <TextField fx:id="newProjectTitle" layoutX="105.0" layoutY="226.0" />
+      <Label layoutX="13.0" layoutY="228.0" prefHeight="21.0" prefWidth="75.0" text="Titre">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Label layoutX="13.0" layoutY="123.0" text="Description">
+      <Label layoutX="13.0" layoutY="270.0" text="Description">
          <font>
             <Font size="15.0" />
          </font>
       </Label>
-      <Button fx:id="createProjectButton" layoutX="152.0" layoutY="355.0" mnemonicParsing="false" onAction="#createProject" prefHeight="25.0" prefWidth="102.0" text="Create Project" />
+      <Button fx:id="createProjectButton" layoutX="152.0" layoutY="355.0" mnemonicParsing="false" onAction="#createProject" prefHeight="25.0" prefWidth="102.0" text="Créer Project" />
+      <Label fx:id="createProjectLabel" alignment="CENTER" layoutX="14.0" layoutY="151.0" prefHeight="65.0" prefWidth="299.0" text="Créer un projet : ">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="deleteProjectLabel" alignment="CENTER" layoutX="14.0" layoutY="11.0" prefHeight="65.0" prefWidth="299.0" text="Supprimer un projet : ">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <TextField fx:id="idProjectToDelete" layoutX="105.0" layoutY="83.0" />
+      <Label layoutX="21.0" layoutY="86.0" prefHeight="21.0" prefWidth="75.0" text="ID : ">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="createProjectErrorMessage" layoutX="13.0" layoutY="207.0" prefHeight="18.0" prefWidth="244.0" />
+      <Button fx:id="deleteProjectButton" layoutX="152.0" layoutY="126.0" mnemonicParsing="false" onAction="#deleteProject" prefHeight="25.0" prefWidth="102.0" text="Supprimer" />
+      <Label fx:id="deleteProjectErrorMessage" layoutX="21.0" layoutY="67.0" prefHeight="18.0" prefWidth="244.0" />
+      <Button fx:id="updateProjectButton" layoutX="325.0" layoutY="139.0" mnemonicParsing="false" onAction="#updateProjectWindow" prefHeight="48.0" prefWidth="132.0" text="Modifier un projet" />
+      <Button layoutX="765.0" layoutY="34.0" mnemonicParsing="false" onAction="#getAllProjectsController" prefHeight="32.0" prefWidth="84.0" text="Voir" />
    </children>
 </Pane>
