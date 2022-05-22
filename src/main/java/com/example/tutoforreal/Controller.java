@@ -2,6 +2,7 @@ package com.example.tutoforreal;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.net.URL;
@@ -66,27 +66,27 @@ public class Controller implements Initializable {
     public void initialize(URL location, ResourceBundle ressources) {
     }
 
+
     public void getAllProjectsController (){
-        DatabaseConnection connectNow = new DatabaseConnection();
-        Connection connectDB = connectNow.getDbConnection();
-        ProjectQueries projectQueries = new ProjectQueries(connectNow);
-        ObservableList<Project>projectList = FXCollections.observableArrayList();
+            DatabaseConnection connectNow = new DatabaseConnection();
+            Connection connectDB = connectNow.getDbConnection();
+            ProjectQueries projectQueries = new ProjectQueries(connectNow);
+            ObservableList<Project>projectList = FXCollections.observableArrayList();
             try {
                 ArrayList<Project>queryOutput = projectQueries.getAllProject();
                 int size = queryOutput.size();
                 for (int cpt = 0; cpt < size; cpt++) {
                     Project p = queryOutput.get(cpt);
                     projectList.add(p);
-
                 }
+                projetColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
+                projetColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+                projetColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+                projectTableView.setItems(projectList);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            projetColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
-            projetColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-            projetColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
 
-            projectTableView.setItems(projectList);
     }
 
     public void createProject(){
@@ -99,8 +99,6 @@ public class Controller implements Initializable {
             ProjectQueries projectQueries = new ProjectQueries(connectNow);
             try {
                 projectQueries.createProject(p);
-                projectTableView.getColumns().removeAll();
-                getAllProjectsController();
                 createProjectErrorMessage.setText("Projet crée");
                 createProjectErrorMessage.setTextFill(Color.GREEN);
             }
@@ -126,8 +124,6 @@ public class Controller implements Initializable {
             ProjectQueries projectQueries = new ProjectQueries(connectNow);
             try {
                 projectQueries.deleteProject(id);
-                projectTableView.getColumns().removeAll();
-                getAllProjectsController();
                 deleteProjectErrorMessage.setText("Projet supprimé");
                 deleteProjectErrorMessage.setTextFill(Color.GREEN);
             }
@@ -144,7 +140,23 @@ public class Controller implements Initializable {
 
     public void updateProjectWindow() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("updateProject.fxml"));
-        Scene updateScene = new Scene(fxmlLoader.load(), 448, 316);
+        Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
+        Stage updateWindow = new Stage();
+        updateWindow.setScene(updateScene);
+        updateWindow.show();
+    }
+
+    public void deleteProjectWindow() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("deleteProject.fxml"));
+        Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
+        Stage updateWindow = new Stage();
+        updateWindow.setScene(updateScene);
+        updateWindow.show();
+    }
+
+    public void createProjectWindow() throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("createProject.fxml"));
+        Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
         updateWindow.show();
@@ -153,11 +165,11 @@ public class Controller implements Initializable {
 
     }
 
-    public void cancelUpate() {
-
+    public void cancelWindow(ActionEvent event) {
+        ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
     }
 
-    public void askForUpdate() throws SQLException {
+    public void askForUpdate(ActionEvent event) throws SQLException {
         DatabaseConnection connectNow = new DatabaseConnection();
         Connection connectDB = connectNow.getDbConnection();
         ProjectQueries projectQueries = new ProjectQueries(connectNow);

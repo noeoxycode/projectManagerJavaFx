@@ -4,8 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
@@ -15,46 +13,16 @@
          <font>
             <Font size="22.0" />
          </font></Label>
-      <TableView fx:id="projectTableView" layoutX="492.0" layoutY="78.0" prefHeight="301.0" prefWidth="348.0">
+      <TableView fx:id="projectTableView" layoutX="321.0" layoutY="78.0" prefHeight="301.0" prefWidth="519.0">
          <columns>
             <TableColumn fx:id="projetColumnId" prefWidth="40.0" text="ID" />
             <TableColumn fx:id="projetColumnTitle" prefWidth="116.0" text="TITLE" />
-            <TableColumn fx:id="projetColumnDescription" prefWidth="191.0" text="DESCRIPTION" />
+            <TableColumn fx:id="projetColumnDescription" prefWidth="352.0" text="DESCRIPTION" />
          </columns>
       </TableView>
-      <TextArea fx:id="newProjectDescription" layoutX="105.0" layoutY="270.0" prefHeight="65.0" prefWidth="149.0" />
-      <TextField fx:id="newProjectTitle" layoutX="105.0" layoutY="226.0" />
-      <Label layoutX="13.0" layoutY="228.0" prefHeight="21.0" prefWidth="75.0" text="Titre">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Label layoutX="13.0" layoutY="270.0" text="Description">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Button fx:id="createProjectButton" layoutX="152.0" layoutY="355.0" mnemonicParsing="false" onAction="#createProject" prefHeight="25.0" prefWidth="102.0" text="Créer Project" />
-      <Label fx:id="createProjectLabel" alignment="CENTER" layoutX="14.0" layoutY="151.0" prefHeight="65.0" prefWidth="299.0" text="Créer un projet : ">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
-      <Label fx:id="deleteProjectLabel" alignment="CENTER" layoutX="14.0" layoutY="11.0" prefHeight="65.0" prefWidth="299.0" text="Supprimer un projet : ">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
-      <TextField fx:id="idProjectToDelete" layoutX="105.0" layoutY="83.0" />
-      <Label layoutX="21.0" layoutY="86.0" prefHeight="21.0" prefWidth="75.0" text="ID : ">
-         <font>
-            <Font size="15.0" />
-         </font>
-      </Label>
-      <Label fx:id="createProjectErrorMessage" layoutX="13.0" layoutY="207.0" prefHeight="18.0" prefWidth="244.0" />
-      <Button fx:id="deleteProjectButton" layoutX="152.0" layoutY="126.0" mnemonicParsing="false" onAction="#deleteProject" prefHeight="25.0" prefWidth="102.0" text="Supprimer" />
-      <Label fx:id="deleteProjectErrorMessage" layoutX="21.0" layoutY="67.0" prefHeight="18.0" prefWidth="244.0" />
-      <Button fx:id="updateProjectButton" layoutX="325.0" layoutY="139.0" mnemonicParsing="false" onAction="#updateProjectWindow" prefHeight="48.0" prefWidth="132.0" text="Modifier un projet" />
       <Button layoutX="765.0" layoutY="34.0" mnemonicParsing="false" onAction="#getAllProjectsController" prefHeight="32.0" prefWidth="84.0" text="Voir" />
+      <Button fx:id="deleteProjectAsk" layoutX="59.0" layoutY="301.0" mnemonicParsing="false" onAction="#deleteProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Supprimer un projet" />
+      <Button fx:id="deleteProjectAsk1" layoutX="59.0" layoutY="55.0" mnemonicParsing="false" onAction="#createProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Créer un projet" />
+      <Button fx:id="updateProjectButton" layoutX="59.0" layoutY="176.0" mnemonicParsing="false" onAction="#updateProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Modifier un projet" />
    </children>
 </Pane>
