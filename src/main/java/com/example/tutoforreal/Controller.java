@@ -11,6 +11,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import org.sqlite.SQLiteCommitListener;
 
 import java.io.IOException;
 import java.net.URL;
@@ -64,13 +65,25 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
+        DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
+            @Override
+            public void onCommit() {
+                Controller.this.getAllProjectsController();
+            }
+
+            @Override
+            public void onRollback() {
+
+            }
+        });
+
+
     }
 
 
     public void getAllProjectsController (){
-            DatabaseConnection connectNow = new DatabaseConnection();
-            Connection connectDB = connectNow.getDbConnection();
-            ProjectQueries projectQueries = new ProjectQueries(connectNow);
+            Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
+            ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
             ObservableList<Project>projectList = FXCollections.observableArrayList();
             try {
                 ArrayList<Project>queryOutput = projectQueries.getAllProject();
@@ -86,7 +99,6 @@ public class Controller implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-
     }
 
     public void createProject(){
@@ -94,9 +106,8 @@ public class Controller implements Initializable {
         String description = newProjectDescription.getText();
         if(title != "" && description != ""){
             Project p = new Project(title, description);
-            DatabaseConnection connectNow = new DatabaseConnection();
-            Connection connectDB = connectNow.getDbConnection();
-            ProjectQueries projectQueries = new ProjectQueries(connectNow);
+            Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
+            ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
             try {
                 projectQueries.createProject(p);
                 createProjectErrorMessage.setText("Projet crée");
@@ -119,9 +130,8 @@ public class Controller implements Initializable {
 
         if(tmp != ""){
             int id = Integer.parseInt(tmp);
-            DatabaseConnection connectNow = new DatabaseConnection();
-            Connection connectDB = connectNow.getDbConnection();
-            ProjectQueries projectQueries = new ProjectQueries(connectNow);
+            Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
+            ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
             try {
                 projectQueries.deleteProject(id);
                 deleteProjectErrorMessage.setText("Projet supprimé");
@@ -170,9 +180,8 @@ public class Controller implements Initializable {
     }
 
     public void askForUpdate(ActionEvent event) throws SQLException {
-        DatabaseConnection connectNow = new DatabaseConnection();
-        Connection connectDB = connectNow.getDbConnection();
-        ProjectQueries projectQueries = new ProjectQueries(connectNow);
+        Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
+        ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
         String title = updateProjectTitle.getText();
         String description = updateProjectDescription.getText();
         int id = Integer.parseInt(updateProjectId.getText());

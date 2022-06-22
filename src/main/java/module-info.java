@@ -3,6 +3,7 @@ module ProjectList {
     requires javafx.fxml;
     requires javafx.graphics;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
 
     opens com.example.tutoforreal to javafx.fxml;
