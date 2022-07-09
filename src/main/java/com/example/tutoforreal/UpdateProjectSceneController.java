@@ -2,7 +2,9 @@ package com.example.tutoforreal;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -11,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteCommitListener;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -27,10 +30,10 @@ public class UpdateProjectSceneController implements Initializable {
     private TextArea updateProjectDescription;
 
     @FXML
-    private Label pageTitle;
+    private Label projectToUpdateTitle;
 
     @FXML
-    private Label projectToUpdateTitle;
+    private Button goToProjectDetails;
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
@@ -45,7 +48,6 @@ public class UpdateProjectSceneController implements Initializable {
     }
 
     public void askForUpdate(ActionEvent event) throws SQLException {
-        Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
         ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
         String title = updateProjectTitle.getText();
         String description = updateProjectDescription.getText();
@@ -71,6 +73,14 @@ public class UpdateProjectSceneController implements Initializable {
 
     public void cancelWindow(ActionEvent event) {
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
+    }
+
+    private void openProjectDetails () throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("projectDetail.fxml"));
+        Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
+        Stage updateWindow = new Stage();
+        updateWindow.setScene(updateScene);
+        updateWindow.show();
     }
 
 }

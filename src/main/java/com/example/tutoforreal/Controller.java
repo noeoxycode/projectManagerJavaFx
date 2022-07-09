@@ -25,8 +25,6 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
 
     @FXML
-    private AnchorPane mainProjectPage;
-    @FXML
     private TableView<Project> projectTableView;
 
     @FXML
@@ -39,9 +37,6 @@ public class Controller implements Initializable {
     private TextArea newProjectDescription;
 
     @FXML
-    private TableColumn<Project, String> projetColumnId;
-
-    @FXML
     private TableColumn<Project, String> projetColumnTitle;
 
     @FXML
@@ -51,10 +46,7 @@ public class Controller implements Initializable {
     private TextField idProjectToDelete;
 
     @FXML
-    private Label deleteProjectErrorMessage;
-
-
-    ObservableList<Project>projectList = FXCollections.observableArrayList();
+    private Label logMessageProject;
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
@@ -63,16 +55,12 @@ public class Controller implements Initializable {
             public void onCommit() {
                 Controller.this.getAllProjectsController();
             }
-
             @Override
             public void onRollback() {
 
             }
         });
-
-
     }
-
 
     public void getAllProjectsController (){
             Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
@@ -85,7 +73,6 @@ public class Controller implements Initializable {
                     Project p = queryOutput.get(cpt);
                     projectList.add(p);
                 }
-                projetColumnId.setCellValueFactory(new PropertyValueFactory<>("id"));
                 projetColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
                 projetColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
                 projectTableView.setItems(projectList);
@@ -115,34 +102,44 @@ public class Controller implements Initializable {
             createProjectErrorMessage.setTextFill(Color.RED);
 
         }
+    }
 
+    public void deleteProject() {
+        if(projectTableView.getSelectionModel().getSelectedItem() != null){
+            Project p = projectTableView.getSelectionModel().getSelectedItem();
+            System.out.println(p.getId());
+            int id = p.getId();
+            ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
+            try {
+                projectQueries.deleteProject(id);
+                logMessageProject.setText("Projet suprimé");
+                logMessageProject.setTextFill(Color.GREEN);
+            }
+            catch (SQLException e){
+                System.out.println(e);
+            }
+        }
+        else {
+            logMessageProject.setText("Veuillez séléctionner un projet pour le supprimer");
+            logMessageProject.setTextFill(Color.RED);
+        }
     }
 
     @FXML
     private void updateProjectWindow(ActionEvent event) throws IOException {
-        Data.project = projectTableView.getSelectionModel().getSelectedItem();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("updateProject.fxml"));
-        Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
-        Stage updateWindow = new Stage();
-        updateWindow.setScene(updateScene);
-        updateWindow.show();
-    }
-
-    public void deleteProjectWindow() throws IOException {
-        Project p = projectTableView.getSelectionModel().getSelectedItem();
-        System.out.println(p.getId());
-        int id = p.getId();
-        deleteProject(id);
-    }
-
-    public void deleteProject(int id) {
-        ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
-        try {
-            projectQueries.deleteProject(id);
+        if(projectTableView.getSelectionModel().getSelectedItem() != null){
+            Data.project = projectTableView.getSelectionModel().getSelectedItem();
+            FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("updateProject.fxml"));
+            Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
+            Stage updateWindow = new Stage();
+            updateWindow.setScene(updateScene);
+            updateWindow.show();
         }
-        catch (SQLException e){
-            System.out.println(e);
+        else {
+            logMessageProject.setText("Veuillez séléctionner un projet pour le modifier");
+            logMessageProject.setTextFill(Color.RED);
         }
+
     }
 
     public void createProjectWindow() throws IOException {

@@ -15,14 +15,14 @@
          </font></Label>
       <TableView fx:id="projectTableView" layoutX="321.0" layoutY="78.0" prefHeight="301.0" prefWidth="519.0">
          <columns>
-            <TableColumn fx:id="projetColumnId" prefWidth="40.0" text="ID" />
             <TableColumn fx:id="projetColumnTitle" prefWidth="116.0" text="TITLE" />
-            <TableColumn fx:id="projetColumnDescription" prefWidth="352.0" text="DESCRIPTION" />
+            <TableColumn fx:id="projetColumnDescription" prefWidth="402.0" text="DESCRIPTION" />
          </columns>
       </TableView>
       <Button layoutX="765.0" layoutY="34.0" mnemonicParsing="false" onAction="#getAllProjectsController" prefHeight="32.0" prefWidth="84.0" text="Voir" />
-      <Button fx:id="deleteProjectAsk" layoutX="59.0" layoutY="301.0" mnemonicParsing="false" onAction="#deleteProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Supprimer un projet" />
-      <Button fx:id="deleteProjectAsk1" layoutX="59.0" layoutY="55.0" mnemonicParsing="false" onAction="#createProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Créer un projet" />
-      <Button fx:id="updateProjectButton" layoutX="59.0" layoutY="176.0" mnemonicParsing="false" onAction="#updateProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Modifier un projet" />
+      <Button fx:id="deleteProjectAsk" layoutX="59.0" layoutY="301.0" mnemonicParsing="false" onAction="#deleteProject" prefHeight="48.0" prefWidth="161.0" text="Supprimer un projet" />
+      <Button fx:id="deleteProjectAsk1" layoutX="59.0" layoutY="86.0" mnemonicParsing="false" onAction="#createProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Créer un projet" />
+      <Button fx:id="updateProjectButton" layoutX="59.0" layoutY="194.0" mnemonicParsing="false" onAction="#updateProjectWindow" prefHeight="48.0" prefWidth="161.0" text="Modifier un projet" />
+      <Label fx:id="logMessageProject" layoutX="57.0" layoutY="38.0" prefHeight="18.0" prefWidth="350.0" />
    </children>
 </Pane>
