@@ -32,9 +32,6 @@ public class UpdateProjectSceneController implements Initializable {
     @FXML
     private Label projectToUpdateTitle;
 
-    @FXML
-    private Button goToProjectDetails;
-
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
         /*pageTitle.setText(Data.project.getTitle());*/
@@ -75,12 +72,12 @@ public class UpdateProjectSceneController implements Initializable {
         ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
     }
 
+    @FXML
     private void openProjectDetails () throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("projectDetail.fxml"));
-        Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
+        Scene updateScene = new Scene(fxmlLoader.load(), 812, 400);
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
         updateWindow.show();
     }
-
 }

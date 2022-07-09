@@ -34,6 +34,6 @@
             <Font size="25.0" />
          </font>
       </Label>
-      <Button fx:id="goToProjectDetails" layoutX="159.0" layoutY="202.0" mnemonicParsing="false" onAction="#openProjectDetails" prefHeight="25.0" prefWidth="144.0" text="Voir le détail" />
+      <Button fx:id="goToProjectDetails" layoutX="183.0" layoutY="202.0" mnemonicParsing="false" onAction="#openProjectDetails" text="Button" />
    </children>
 </Pane>

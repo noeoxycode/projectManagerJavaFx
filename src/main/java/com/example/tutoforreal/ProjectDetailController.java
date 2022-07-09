@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class TaskDetailController implements Initializable {
+public class ProjectDetailController implements Initializable {
 
     @FXML
     private TableView<Task> taskTableView;
@@ -37,10 +37,16 @@ public class TaskDetailController implements Initializable {
     private TextArea newTaskDescription;
 
     @FXML
-    private TableColumn<Task, String> projetColumnTitle;
+    private TableColumn<Task, String> taskColumnTitle;
 
     @FXML
-    private TableColumn<Task, String> projetColumnDescription;
+    private TableColumn<Task, String> taskColumnStatus;
+
+    @FXML
+    private TableColumn<Task, String> taskColumnAssigned;
+
+    @FXML
+    private TableColumn<Task, String> taskColumnDeadline;
 
     @FXML
     private TextField idTaskToDelete;
@@ -50,37 +56,29 @@ public class TaskDetailController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
-        DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
-            @Override
-            public void onCommit() {
-                TaskDetailController.this.getAllTasksController();
-            }
-            @Override
-            public void onRollback() {
 
-            }
-        });
     }
 
     public void getAllTasksController (){
-        Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
         TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
         ObservableList<Task>taskList = FXCollections.observableArrayList();
         try {
-            ArrayList<Task>queryOutput = taskQueries.getAllTask();
+            ArrayList<Task>queryOutput = taskQueries.getAlltask();
             int size = queryOutput.size();
             for (int cpt = 0; cpt < size; cpt++) {
                 Task p = queryOutput.get(cpt);
                 taskList.add(p);
             }
-            projetColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-            projetColumnDescription.setCellValueFactory(new PropertyValueFactory<>("description"));
+            taskColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+            taskColumnStatus.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
+            taskColumnAssigned.setCellValueFactory(new PropertyValueFactory<>("assignedTo"));
+            taskColumnDeadline.setCellValueFactory(new PropertyValueFactory<>("deadline"));
             taskTableView.setItems(taskList);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
+/*
     public void createTask(){
         String title = newTaskTitle.getText();
         String description = newTaskDescription.getText();
@@ -103,7 +101,7 @@ public class TaskDetailController implements Initializable {
 
         }
     }
-
+*/
     public void deleteTask() {
         if(taskTableView.getSelectionModel().getSelectedItem() != null){
             Task p = taskTableView.getSelectionModel().getSelectedItem();
