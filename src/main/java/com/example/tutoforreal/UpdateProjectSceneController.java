@@ -53,10 +53,14 @@ public class UpdateProjectSceneController implements Initializable {
             int projectId = Data.project.getId();
             if (Data.project.getDescription() != description & description != "")
                 projectQueries.updateProjectDescription(projectId, description);
-            if (Data.project.getTitle() != title & title != "")
+            if (Data.project.getTitle() != title & title != ""){
                 projectQueries.updateProjecttitle(projectId, title);
+                projectToUpdateTitle.setText(title);
+            }
+
             updateProjectErrorMessage.setText("Projet modifié");
             updateProjectErrorMessage.setTextFill(Color.GREEN);
+
         }
         catch (SQLException e){
             updateProjectErrorMessage.setText("Veuillez renseigner un ID valide");
