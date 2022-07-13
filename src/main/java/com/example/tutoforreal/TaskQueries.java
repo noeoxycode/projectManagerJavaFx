@@ -16,12 +16,13 @@ import org.sqlite.SQLiteCommitListener;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.Instant;
 import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Scanner;
@@ -46,11 +47,11 @@ public class TaskQueries {
         TaskStatus taskStatus = TaskStatus.valueOf(result.getString("taskStatus"));
         String description = result.getString("description");
         int projectId = result.getInt("projectId");
-        LocalDate deadLine = result.getDate("deadLine").toLocalDate();
+        LocalDate deadline = result.getDate("deadline").toLocalDate();
         int taskDuration = result.getInt("taskDuration");
         String author = result.getString("author");
         String assignedTo = result.getString("assignedTo");
-        return new Task(title, taskStatus, description, projectId, deadLine, taskDuration, author, assignedTo);
+        return new Task(title, taskStatus, description, projectId, deadline, taskDuration, author, assignedTo);
     }
 
     public ArrayList<Task> getAlltask() throws SQLException {
@@ -61,15 +62,17 @@ public class TaskQueries {
         pstmt.setInt(1, idProject);
         ResultSet result = pstmt.executeQuery();
         while (result.next()){
+            int taskId = result.getInt("id");
             String title = result.getString("title");
             TaskStatus taskStatus = TaskStatus.valueOf(result.getString("taskStatus"));
             String description = result.getString("description");
+            LocalDate publishedDate = result.getDate("publishedDate").toLocalDate();
             int projectId = result.getInt("projectId");
-            LocalDate deadLine = result.getDate("deadLine").toLocalDate();
+            LocalDate deadline = result.getDate("deadline").toLocalDate();
             int taskDuration = result.getInt("taskDuration");
             String author = result.getString("author");
             String assignedTo = result.getString("assignedTo");
-            Task t = new Task(title, taskStatus, description, projectId, deadLine, taskDuration, author, assignedTo);
+            Task t = new Task(taskId, title, taskStatus, description, publishedDate, projectId, deadline, taskDuration, author, assignedTo);
             taskList.add(t);
         }
         return taskList;
@@ -81,21 +84,46 @@ public class TaskQueries {
         pstmt.setString(1, newTask.getTitle());
         pstmt.setString(2, newTask.getTaskStatus().toString());
         pstmt.setString(3, newTask.getDescription());
-        pstmt.setString(4, newTask.getPublishedDate().toString());
+        Date publishedDate = Date.from(newTask.getPublishedDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long newPublishedDate = publishedDate.getTime();
+        pstmt.setLong(4, newPublishedDate);
         pstmt.setInt(5, newTask.getProjectId());
-        pstmt.setString(6, newTask.getDeadLine().toString());
+        Date deadline = Date.from(newTask.getDeadLine().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long newDeadline = publishedDate.getTime();
+        pstmt.setLong(6, newDeadline);
         pstmt.setInt(7, newTask.getTaskDuration());
         pstmt.setString(8, newTask.getAuthor());
         pstmt.setString(9, newTask.getAssignedTo());
         pstmt.executeUpdate();
     }
 
-    public void updateTasktitle(int id, String newTitle, int idProject) throws SQLException {
+    public void updateTask(Task task) throws SQLException {
+        String sql = "update task set title = ?, taskStatus = ?, description = ?, publishedDate = ?, projectId = ?, deadline = ?, taskDuration = ?, author = ?, assignedTo = ? where id == ? AND projectId == ?";
+        PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
+        pstmt.setString(1, task.getTitle());
+        pstmt.setString(2, task.getTaskStatus().toString());
+        pstmt.setString(3, task.getDescription());
+        Date publishedDate = Date.from(task.getPublishedDate().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long newPublishedDate = publishedDate.getTime();
+        pstmt.setLong(4, newPublishedDate);
+        pstmt.setInt(5, task.getProjectId());
+        Date deadline = Date.from(task.getDeadLine().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long newDeadline = deadline.getTime();
+        pstmt.setLong(6, newDeadline);
+        pstmt.setInt(7, task.getTaskDuration());
+        pstmt.setString(8, task.getAuthor());
+        pstmt.setString(9, task.getAssignedTo());
+        pstmt.setInt(10, task.getId());
+        pstmt.setInt(11, task.getProjectId());
+        pstmt.executeUpdate();
+    }
+
+    public void updateTasktitle(String newTitle) throws SQLException {
         String sql = "update task set title = ? where id == ? AND projectId == ?";
         PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
         pstmt.setString(1, newTitle);
-        pstmt.setInt(2, id);
-        pstmt.setInt(3, idProject);
+        pstmt.setInt(2, Data.task.getId());
+        pstmt.setInt(3, Data.task.getProjectId());
         pstmt.executeUpdate();
     }
 
@@ -108,12 +136,12 @@ public class TaskQueries {
         pstmt.executeUpdate();
     }
 
-    public void updateTaskdescription(int id, String description, int idProject) throws SQLException {
+    public void updateTaskDescription(String description) throws SQLException {
         String sql = "update task set description = ? where id == ? AND projectId == ?";
         PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
         pstmt.setString(1, description);
-        pstmt.setInt(2, id);
-        pstmt.setInt(3, idProject);
+        pstmt.setInt(2, Data.task.getId());
+        pstmt.setInt(3, Data.task.getProjectId());
         pstmt.executeUpdate();
     }
 
@@ -163,12 +191,11 @@ public class TaskQueries {
     }
 
 
-    public void deleteTask(int idProject) throws SQLException {
-        int id = Data.project.getId();
-        String sql = "delete from task where id == ? AND projectId == ?";
+    public void deleteTask() throws SQLException {
+        int id = Data.task.getId();
+        String sql = "delete from task where id == ?";
         PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
         pstmt.setInt(1, id);
-        pstmt.setInt(2, idProject);
         pstmt.executeUpdate();
     }
 }

@@ -35,7 +35,6 @@ public class UpdateProjectSceneController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
         /*pageTitle.setText(Data.project.getTitle());*/
-        System.out.println("coucou");
         if(Data.project.getTitle() != null)
             projectToUpdateTitle.setText(Data.project.getTitle());
         if(Data.project.getTitle() != null)
@@ -56,10 +55,15 @@ public class UpdateProjectSceneController implements Initializable {
                 projectQueries.updateProjecttitle(projectId, title);
                 projectToUpdateTitle.setText(title);
             }
-
-            updateProjectErrorMessage.setText("Projet modifié");
-            updateProjectErrorMessage.setTextFill(Color.GREEN);
-
+            if(Data.project.getTitle() == title && Data.project.getDescription() == description){
+                updateProjectErrorMessage.setText("Rien à modifier");
+                updateProjectErrorMessage.setTextFill(Color.YELLOW);
+                System.out.println("on rentre dans le prog");
+            }
+            /*else {
+                updateProjectErrorMessage.setText("Projet modifié");
+                updateProjectErrorMessage.setTextFill(Color.GREEN);
+            }*/
         }
         catch (SQLException e){
             updateProjectErrorMessage.setText("Veuillez renseigner un ID valide");

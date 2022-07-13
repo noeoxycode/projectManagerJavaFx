@@ -18,7 +18,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -26,15 +28,6 @@ public class ProjectDetailController implements Initializable {
 
     @FXML
     private TableView<Task> taskTableView;
-
-    @FXML
-    private Label createTaskErrorMessage;
-
-    @FXML
-    private TextField newTaskTitle;
-
-    @FXML
-    private TextArea newTaskDescription;
 
     @FXML
     private TableColumn<Task, String> taskColumnTitle;
@@ -46,17 +39,20 @@ public class ProjectDetailController implements Initializable {
     private TableColumn<Task, String> taskColumnAssigned;
 
     @FXML
-    private TableColumn<Task, String> taskColumnDeadline;
-
-    @FXML
-    private TextField idTaskToDelete;
-
-    @FXML
     private Label logMessageTask;
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
+        DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
+            @Override
+            public void onCommit() {
+                ProjectDetailController.this.getAllTasksController();
+            }
+            @Override
+            public void onRollback() {
 
+            }
+        });
     }
 
     public void getAllTasksController (){
@@ -72,7 +68,6 @@ public class ProjectDetailController implements Initializable {
             taskColumnTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
             taskColumnStatus.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
             taskColumnAssigned.setCellValueFactory(new PropertyValueFactory<>("assignedTo"));
-            taskColumnDeadline.setCellValueFactory(new PropertyValueFactory<>("deadline"));
             taskTableView.setItems(taskList);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -104,13 +99,11 @@ public class ProjectDetailController implements Initializable {
 */
     public void deleteTask() {
         if(taskTableView.getSelectionModel().getSelectedItem() != null){
-            Task p = taskTableView.getSelectionModel().getSelectedItem();
-            System.out.println(p.getId());
-            int id = p.getId();
+            Data.task = taskTableView.getSelectionModel().getSelectedItem();
             TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
             try {
-                taskQueries.deleteTask(id);
-                logMessageTask.setText("Projet suprimé");
+                taskQueries.deleteTask();
+                logMessageTask.setText("Tâche suprimée");
                 logMessageTask.setTextFill(Color.GREEN);
             }
             catch (SQLException e){
@@ -127,8 +120,9 @@ public class ProjectDetailController implements Initializable {
     private void updateTaskWindow(ActionEvent event) throws IOException {
         if(taskTableView.getSelectionModel().getSelectedItem() != null){
             Data.task = taskTableView.getSelectionModel().getSelectedItem();
+            System.out.println(Data.task);
             FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("updateTask.fxml"));
-            Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
+            Scene updateScene = new Scene(fxmlLoader.load(), 450, 550);
             Stage updateWindow = new Stage();
             updateWindow.setScene(updateScene);
             updateWindow.show();
@@ -142,7 +136,7 @@ public class ProjectDetailController implements Initializable {
 
     public void createTaskWindow() throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("createTask.fxml"));
-        Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
+        Scene updateScene = new Scene(fxmlLoader.load(), 450, 500);
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
         updateWindow.show();

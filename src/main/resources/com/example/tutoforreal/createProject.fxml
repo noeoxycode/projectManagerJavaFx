@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.Controller">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.CreateProjectController">
    <children>
       <TextArea fx:id="newProjectDescription" layoutX="191.0" layoutY="142.0" prefHeight="65.0" prefWidth="149.0" />
       <TextField fx:id="newProjectTitle" layoutX="191.0" layoutY="102.0" />
@@ -29,6 +29,6 @@
          </font>
       </Label>
       <Label fx:id="createProjectErrorMessage" layoutX="92.0" layoutY="70.0" prefHeight="18.0" prefWidth="244.0" />
-      <Button fx:id="createProjectButton1" layoutX="104.0" layoutY="235.0" mnemonicParsing="false" onAction="#cancelWindow" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: red;" text="Retour" />
+      <Button fx:id="cancelCreation" layoutX="104.0" layoutY="235.0" mnemonicParsing="false" onAction="#cancelWindow" prefHeight="25.0" prefWidth="102.0" style="-fx-background-color: red;" text="Retour" />
    </children>
 </Pane>

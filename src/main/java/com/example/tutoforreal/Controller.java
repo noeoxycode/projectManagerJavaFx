@@ -28,22 +28,10 @@ public class Controller implements Initializable {
     private TableView<Project> projectTableView;
 
     @FXML
-    private Label createProjectErrorMessage;
-
-    @FXML
-    private TextField newProjectTitle;
-
-    @FXML
-    private TextArea newProjectDescription;
-
-    @FXML
     private TableColumn<Project, String> projetColumnTitle;
 
     @FXML
     private TableColumn<Project, String> projetColumnDescription;
-
-    @FXML
-    private TextField idProjectToDelete;
 
     @FXML
     private Label logMessageProject;
@@ -63,7 +51,6 @@ public class Controller implements Initializable {
     }
 
     public void getAllProjectsController (){
-            Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
             ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
             ObservableList<Project>projectList = FXCollections.observableArrayList();
             try {
@@ -79,29 +66,6 @@ public class Controller implements Initializable {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-    }
-
-    public void createProject(){
-        String title = newProjectTitle.getText();
-        String description = newProjectDescription.getText();
-        if(title != "" && description != ""){
-            Project p = new Project(title, description);
-            Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
-            ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
-            try {
-                projectQueries.createProject(p);
-                createProjectErrorMessage.setText("Projet crée");
-                createProjectErrorMessage.setTextFill(Color.GREEN);
-            }
-            catch (SQLException e){
-                System.out.println(e);
-            }
-        }
-        else {
-            createProjectErrorMessage.setText("Veuillez renseigner tous les champs");
-            createProjectErrorMessage.setTextFill(Color.RED);
-
-        }
     }
 
     public void deleteProject() {
@@ -139,7 +103,6 @@ public class Controller implements Initializable {
             logMessageProject.setText("Veuillez séléctionner un projet pour le modifier");
             logMessageProject.setTextFill(Color.RED);
         }
-
     }
 
     public void createProjectWindow() throws IOException {
@@ -148,9 +111,5 @@ public class Controller implements Initializable {
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
         updateWindow.show();
-    }
-
-    public void cancelWindow(ActionEvent event) {
-        ((Stage)(((Button)event.getSource()).getScene().getWindow())).close();
     }
 }

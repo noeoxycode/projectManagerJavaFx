@@ -11,10 +11,42 @@ public class Task {
     private String description;
     private LocalDate publishedDate;
     private int projectId;
-    private LocalDate deadLine;
+    private LocalDate deadline;
     private int taskDuration;
     private String author;
     private String asignedTo;
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setTaskStatus(TaskStatus taskStatus) {
+        this.taskStatus = taskStatus;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setPublishedDate(LocalDate publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    public void setDeadline(LocalDate deadline) {
+        this.deadline = deadline;
+    }
+
+    public void setTaskDuration(int taskDuration) {
+        this.taskDuration = taskDuration;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public void setAsignedTo(String asignedTo) {
+        this.asignedTo = asignedTo;
+    }
 
     public int getId() {
         return id;
@@ -41,7 +73,7 @@ public class Task {
     }
 
     public LocalDate getDeadLine() {
-        return deadLine;
+        return deadline;
     }
 
     public int getTaskDuration() {
@@ -56,14 +88,26 @@ public class Task {
         return asignedTo;
     }
 
-    public Task(String title, TaskStatus taskStatus, String description, int projectId, LocalDate deadLine, int taskDuration, String author, String asignedTo) {
+    public Task(String title, TaskStatus taskStatus, String description, int projectId, LocalDate deadline, int taskDuration, String author, String asignedTo) {
         this.title = title;
         this.taskStatus = taskStatus;
         this.description = description;
         this.publishedDate = LocalDate.from(LocalDateTime.now());
         this.projectId = projectId;
+        this.deadline = deadline;
+        this.taskDuration = taskDuration;
+        this.author = author;
+        this.asignedTo = asignedTo;
+    }
+
+    public Task(int id, String title, TaskStatus taskStatus, String description, LocalDate publishedDate,  int projectId, LocalDate deadline, int taskDuration, String author, String asignedTo) {
+        this.id = id;
+        this.title = title;
+        this.taskStatus = taskStatus;
+        this.description = description;
+        this.publishedDate = publishedDate;
         this.projectId = projectId;
-        this.deadLine = deadLine;
+        this.deadline = deadline;
         this.taskDuration = taskDuration;
         this.author = author;
         this.asignedTo = asignedTo;
@@ -80,7 +124,7 @@ public class Task {
         LocalDate date = LocalDate.of( year , month , day );
         return date;
     }
-
+/*
     static Task createtask(int idProject){
         Scanner scan = new Scanner(System.in);
         System.out.println("title");
@@ -102,7 +146,7 @@ public class Task {
         Task newTask = new Task(title, taskStatus, description, projectId, deadline, taskDuration, author, assignedTo);
         return newTask;
     }
-
+*/
     @Override
     public String toString() {
         return "Task{" +
@@ -112,7 +156,7 @@ public class Task {
                 ", description='" + description + '\'' +
                 ", publishedDate=" + publishedDate +
                 ", projectId=" + projectId +
-                ", deadLine=" + deadLine +
+                ", deadline=" + deadline +
                 ", taskDuration=" + taskDuration +
                 ", author=" + author +
                 ", asignedTo=" + asignedTo +

@@ -9,7 +9,7 @@ public class DatabaseConnection {
     private  SQLiteConnection databaseLink;
 
     private DatabaseConnection() {
-        String url = "jdbc:sqlite:C:\\Users\\noe\\IdeaProjects\\tutoForReal\\src\\main\\java\\com\\example\\tutoforreal\\mydatabase.db";
+        String url = "jdbc:sqlite:C:\\Users\\noe\\IdeaProjects\\projectManagerJavaFx\\src\\main\\java\\com\\example\\tutoforreal\\mydatabase.db";
         try {
             databaseLink = (SQLiteConnection)DriverManager.getConnection(url);
             System.out.println("Connected to the database");
