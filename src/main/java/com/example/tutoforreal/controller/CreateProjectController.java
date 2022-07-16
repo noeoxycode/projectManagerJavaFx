@@ -1,5 +1,9 @@
-package com.example.tutoforreal;
+package com.example.tutoforreal.controller;
 
+import com.example.tutoforreal.DatabaseConnection;
+import com.example.tutoforreal.LogWriter;
+import com.example.tutoforreal.Project;
+import com.example.tutoforreal.ProjectQueries;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

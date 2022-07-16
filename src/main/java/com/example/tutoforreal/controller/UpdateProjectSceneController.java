@@ -1,5 +1,6 @@
-package com.example.tutoforreal;
+package com.example.tutoforreal.controller;
 
+import com.example.tutoforreal.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

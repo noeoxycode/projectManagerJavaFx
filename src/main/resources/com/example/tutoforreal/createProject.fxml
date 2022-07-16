@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.CreateProjectController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="450.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.tutoforreal.controller.CreateProjectController">
    <children>
       <TextArea fx:id="newProjectDescription" layoutX="191.0" layoutY="142.0" prefHeight="65.0" prefWidth="149.0" />
       <TextField fx:id="newProjectTitle" layoutX="191.0" layoutY="102.0" />

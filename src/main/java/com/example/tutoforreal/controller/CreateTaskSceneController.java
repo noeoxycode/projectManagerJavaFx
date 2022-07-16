@@ -1,5 +1,6 @@
-package com.example.tutoforreal;
+package com.example.tutoforreal.controller;
 
+import com.example.tutoforreal.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

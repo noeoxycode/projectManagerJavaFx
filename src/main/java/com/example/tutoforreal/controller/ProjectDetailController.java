@@ -1,5 +1,6 @@
-package com.example.tutoforreal;
+package com.example.tutoforreal.controller;
 
+import com.example.tutoforreal.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,19 +11,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteCommitListener;
 
 import java.io.*;
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ProjectDetailController implements Initializable {
