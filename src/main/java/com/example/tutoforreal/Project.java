@@ -57,11 +57,14 @@ public class Project {
 
     @Override
     public String toString() {
-        return "Project{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", projectList=" + projectList +
-                '}';
+        return "Projet " + title +
+                "\n" +
+                "Id du projet : " + id +
+                "\n" +
+                "* Titre du projet : " + title +
+                "\n" +
+                "* Description du projet : " + description +
+                "\n" +
+                "\n";
     }
 }

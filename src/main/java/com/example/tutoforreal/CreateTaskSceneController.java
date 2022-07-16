@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static com.example.tutoforreal.TaskStatus.*;
@@ -19,7 +20,7 @@ import static com.example.tutoforreal.TaskStatus.Done;
 
 public class CreateTaskSceneController implements Initializable {
     @FXML
-    private Label updateTaskErrorMessage;
+    private Label LogMessage;
 
     @FXML
     private TextField updateTaskTitle;
@@ -34,21 +35,33 @@ public class CreateTaskSceneController implements Initializable {
     private TextField updateTaskDuration;
 
     @FXML
-    private TextField updateTaskAuthor;
+    private ComboBox updateTaskAuthor;
 
     @FXML
-    private TextField updateTaskAssignedTo;
+    private ComboBox updateTaskAssignedTo;
 
     @FXML
-    private ComboBox taskStatusCombobox;
+    private ComboBox<TaskStatus> taskStatusCombobox;
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
-        ObservableList<TaskStatus> status = FXCollections.observableArrayList(New, In_progress, Testing, Done);
-        taskStatusCombobox.setItems(status);
+        ArrayList<String> users = null;
+        ArrayList<TaskStatus> status = null;
+        TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
+        try {
+            users = taskQueries.getAllUsers();
+            status = taskQueries.getAllTaskStatus();
+            taskStatusCombobox.setItems(FXCollections.observableList(status));
+            updateTaskAuthor.setItems(FXCollections.observableList(users));
+            updateTaskAssignedTo.setItems(FXCollections.observableList(users));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void askForTaskCreation(ActionEvent event) throws SQLException {
+    public void askForTaskCreation(ActionEvent event) {
+        String logs = "CreateTaskSceneController askForTaskCreation : ";
         TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
         String title = null;
         TaskStatus taskStatus = null;
@@ -57,32 +70,82 @@ public class CreateTaskSceneController implements Initializable {
         int taskDuration = 0;
         String author = null;
         String asignedTo = null;
-        if (updateTaskTitle.getText() != null)
+        if (!updateTaskTitle.getText().isBlank())
             title = updateTaskTitle.getText();
+        else {
+            LogMessage.setText("Veuillez renseigner le titre de la tâche.");
+            LogMessage.setTextFill(Color.RED);
+            return;
+        }
         if (taskStatusCombobox.getValue() != null)
-            taskStatus = (TaskStatus) taskStatusCombobox.getValue();
-        if ( updateTaskDescription.getText() != null)
+            taskStatus = taskStatusCombobox.getValue();
+        else {
+            LogMessage.setText("Veuillez renseigner le status de la tâche.");
+            LogMessage.setTextFill(Color.RED);
+            return;
+        }
+        if (!updateTaskDescription.getText().isBlank())
             description =  updateTaskDescription.getText();
-        if (updateTaskDeadline.getValue() != null)
+        else{
+            LogMessage.setText("Veuillez renseigner la description de la tâche.");
+            LogMessage.setTextFill(Color.RED);
+            return;
+        }
+        if (updateTaskDeadline.getValue() != null){
             deadline = updateTaskDeadline.getValue();
-        if (Integer.parseInt(updateTaskDuration.getText()) != 0)
-            taskDuration = Integer.parseInt(updateTaskDuration.getText());
-        if (updateTaskAuthor.getText() != null)
-            author = updateTaskAuthor.getText();
-        if (updateTaskAssignedTo.getText() != null)
-            asignedTo = updateTaskAssignedTo.getText();
+        }
+        else {
+            LogMessage.setText("Veuillez renseigner une deadline valide.");
+            LogMessage.setTextFill(Color.RED);
+            return;
+        }
+        if (!updateTaskDuration.getText().isBlank())
+        {
+            try {
+                int tmp = Integer.parseInt(updateTaskDuration.getText());
+                taskDuration = tmp;
+            }
+            catch(NumberFormatException e){
+                LogMessage.setText("Veuillez rentrer une durée valide.");
+                LogMessage.setTextFill(Color.RED);
+                return;
+            }
+        }
+        else {
+            LogMessage.setText("Veuillez renseignerla durée de la tâche.");
+            LogMessage.setTextFill(Color.RED);
+            return;
+        }
+        if (updateTaskAuthor.getValue() != null)
+            author = updateTaskAuthor.getValue().toString();
+        else{
+            LogMessage.setText("Veuillez renseigner l'auteur de la tâche.");
+            LogMessage.setTextFill(Color.RED);
+            return;
+        }
+        if (updateTaskAssignedTo.getValue() != null)
+            asignedTo = updateTaskAssignedTo.getValue().toString();
+        else{
+            LogMessage.setText("Veuillez renseigner la personne assignée à la tâche.");
+            LogMessage.setTextFill(Color.RED);
+            return;
+        }
         int projectId = Data.project.getId();
+
+
         Task task = new Task(title, taskStatus, description, projectId, deadline, taskDuration, author, asignedTo);
         System.out.println("task id" + task);
         try {
             taskQueries.createTask(task);
-            updateTaskErrorMessage.setText("Tâche crée");
-            updateTaskErrorMessage.setTextFill(Color.GREEN);
+            LogMessage.setText("Tâche crée");
+            LogMessage.setTextFill(Color.GREEN);
+            logs = logs + "success";
+            LogWriter.writeLogs(logs);
         }
         catch (SQLException e){
-            updateTaskErrorMessage.setText("Veuillez renseigner un ID valide");
-            updateTaskErrorMessage.setTextFill(Color.RED);
             System.out.println(e);
+            logs = logs + "failed : " + e;
+            LogWriter.writeLogs(logs);
         }
     }
 

@@ -12,6 +12,7 @@ import javafx.stage.Stage;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import static com.example.tutoforreal.TaskStatus.*;
@@ -37,24 +38,41 @@ public class UpdateTaskSceneController implements Initializable {
     private TextField updateTaskDuration;
 
     @FXML
-    private TextField updateTaskAuthor;
+    private ComboBox updateTaskAuthor;
 
     @FXML
-    private TextField updateTaskAssignedTo;
+    private ComboBox updateTaskAssignedTo;
 
     @FXML
     private Label taskToUpdateTitle;
 
     @FXML
-    private ComboBox taskStatusCombobox;
+    private ComboBox<TaskStatus> taskStatusCombobox;
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
-        /*pageTitle.setText(Data.task.getTitle());*/
+        ArrayList<String> users = null;
+        ArrayList<TaskStatus> status = null;
+        TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
+        try {
+            users = taskQueries.getAllUsers();
+            status = taskQueries.getAllTaskStatus();
+            taskStatusCombobox.setItems(FXCollections.observableList(status));
+            updateTaskAuthor.setItems(FXCollections.observableList(users));
+            updateTaskAssignedTo.setItems(FXCollections.observableList(users));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         if(Data.task.getTitle() != null)
         {
             taskToUpdateTitle.setText(Data.task.getTitle());
             updateTaskTitle.setText(Data.task.getTitle());
+        }
+        if(Data.task.getTaskStatus() != null){
+            int i = status.indexOf(Data.task.getTaskStatus());
+            taskStatusCombobox.getSelectionModel().select(i);
+
         }
         if(Data.task.getDescription() != null)
             updateTaskDescription.setText(Data.task.getDescription());
@@ -65,55 +83,107 @@ public class UpdateTaskSceneController implements Initializable {
         if(Data.task.getTaskDuration() > 0)
             updateTaskDuration.setText(String.valueOf(Data.task.getTaskDuration()));
         if(Data.task.getAuthor() != null)
-            updateTaskAuthor.setText(Data.task.getAuthor());
+        {
+            int i = users.indexOf(Data.task.getAuthor());
+            updateTaskAuthor.getSelectionModel().select(i);
+        }
         if(Data.task.getAssignedTo() != null)
-            updateTaskAssignedTo.setText(Data.task.getAssignedTo());
-        ObservableList<TaskStatus> status = FXCollections.observableArrayList(New, In_progress, Testing, Done);
-        taskStatusCombobox.setItems(status);
+        {
+            int i = users.indexOf(Data.task.getAssignedTo());
+            updateTaskAssignedTo.getSelectionModel().select(i);
+        }
     }
 
-    public void askForUpdate(ActionEvent event) throws SQLException {
-        System.out.println("project id" + Data.project.getId());
-        System.out.println("data task id" + Data.task.getId());
+    public void askForUpdate(ActionEvent event) {
+        String logs = "UpdateTaskSceneController : askForUpdate : ";
+        int cptModif = 0;
         TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
-        String title = updateTaskTitle.getText();
-        TaskStatus taskStatus = (TaskStatus) taskStatusCombobox.getValue();
-        String description = updateTaskDescription.getText();
-        LocalDate publishedDate = updateTaskPublishedDate.getValue();
+        String title = "";
+        if(!updateTaskTitle.getText().isBlank())
+            title = updateTaskTitle.getText();
+        TaskStatus taskStatus = taskStatusCombobox.getValue();
+        String description = "";
+        if(!updateTaskDescription.getText().isBlank())
+            description = updateTaskDescription.getText();
+        LocalDate publishedDate;
+        if(updateTaskPublishedDate.getValue() != null)
+             publishedDate = updateTaskPublishedDate.getValue();
+        else {
+            updateTaskErrorMessage.setText("Veuillez renseigner une date de publication valide.");
+            updateTaskErrorMessage.setTextFill(Color.RED);
+            return;
+        }
         int projectId = Data.task.getProjectId();
-        LocalDate deadline = updateTaskDeadline.getValue();
-        int taskDuration = Integer.parseInt(updateTaskDuration.getText());
-        String author = updateTaskAuthor.getText();
-        String asignedTo = updateTaskAssignedTo.getText();
+        LocalDate deadline;
+        if(updateTaskDeadline.getValue() != null)
+            deadline = updateTaskDeadline.getValue();
+        else {
+            updateTaskErrorMessage.setText("Veuillez renseigner une deadline valide.");
+            updateTaskErrorMessage.setTextFill(Color.RED);
+            return;
+        }
+        int taskDuration = 0;
+        if (!updateTaskDuration.getText().isBlank())
+        {
+            try {
+                int tmp = Integer.parseInt(updateTaskDuration.getText());
+                taskDuration = tmp;
+            }
+            catch(NumberFormatException e){
+                updateTaskErrorMessage.setText("Veuillez rentrer une durée valide.");
+                updateTaskErrorMessage.setTextFill(Color.RED);
+                return;
+            }
+        }
+        String author = updateTaskAuthor.getValue().toString();
+        String asignedTo = updateTaskAssignedTo.getValue().toString();
         Task task = Data.task;
         if (Data.task.getTitle() != title & title != ""){
             task.setTitle(title);
             taskToUpdateTitle.setText(title);
         }
-        if (Data.task.getTaskStatus() != taskStatus & taskStatus != null)
+        if (Data.task.getTaskStatus() != taskStatus & taskStatus != null){
             task.setTaskStatus(taskStatus);
-        if (Data.task.getDescription() != description & description != "")
+            cptModif++;
+        }
+        if (Data.task.getDescription() != description & description != ""){
             task.setDescription(description);
-        if (Data.task.getPublishedDate() != publishedDate & publishedDate != null)
+            cptModif++;
+        }
+        if (Data.task.getPublishedDate() != publishedDate & publishedDate != null){
             task.setPublishedDate(publishedDate);
-        if (Data.task.getDeadLine() != deadline & deadline != null)
+            cptModif++;
+        }
+        if (Data.task.getDeadLine() != deadline & deadline != null){
             task.setDeadline(deadline);
-        if (Data.task.getTaskDuration() != taskDuration & description != null)
+            cptModif++;
+        }
+        if (Data.task.getTaskDuration() != taskDuration & taskDuration != 0){
             task.setTaskDuration(taskDuration);
-        if (Data.task.getAuthor() != author & author != "")
+            cptModif++;
+        }
+        if (Data.task.getAuthor() != author & author != ""){
             task.setAuthor(author);
-        if (Data.task.getAssignedTo() != asignedTo & asignedTo != "")
+            cptModif++;
+        }
+        if (Data.task.getAssignedTo() != asignedTo & asignedTo != ""){
             task.setAsignedTo(asignedTo);
-        System.out.println("task id" + task);
+            cptModif++;
+        }
+
         try {
             taskQueries.updateTask(task);
-            updateTaskErrorMessage.setText("Projet modifié");
+            updateTaskErrorMessage.setText("Champs de la tâche modifiés");
             updateTaskErrorMessage.setTextFill(Color.GREEN);
+            logs = logs + "success";
+            LogWriter.writeLogs(logs);
         }
         catch (SQLException e){
             updateTaskErrorMessage.setText("Veuillez renseigner un ID valide");
             updateTaskErrorMessage.setTextFill(Color.RED);
             System.out.println(e);
+            logs = logs + "failed : " + e;
+            LogWriter.writeLogs(logs);
         }
     }
 

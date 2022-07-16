@@ -78,6 +78,26 @@ public class TaskQueries {
         return taskList;
     }
 
+    public ArrayList<String> getAllUsers() throws SQLException {
+        ArrayList<String> users = new ArrayList<String>();
+        String sql = "SELECT name FROM user";
+        PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
+        ResultSet result = pstmt.executeQuery();
+        while (result.next())
+            users.add(result.getString("name"));
+        return users;
+    }
+
+    public ArrayList<TaskStatus> getAllTaskStatus() throws SQLException {
+        ArrayList<TaskStatus> status = new ArrayList<TaskStatus>();
+        String sql = "SELECT label FROM taskStatus";
+        PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
+        ResultSet result = pstmt.executeQuery();
+        while (result.next())
+            status.add(TaskStatus.valueOf(result.getString("label")));
+        return status;
+    }
+
     public void createTask(Task newTask) throws SQLException {
         String sql = "insert into task values (null, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);

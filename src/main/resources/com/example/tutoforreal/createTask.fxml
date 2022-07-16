@@ -30,7 +30,7 @@
       <TextArea fx:id="updateTaskDescription" layoutX="137.0" layoutY="163.0" prefHeight="64.0" prefWidth="277.0" />
       <Button fx:id="cancelUpdate" layoutX="26.0" layoutY="432.0" mnemonicParsing="false" onAction="#cancelWindow" prefHeight="25.0" prefWidth="101.0" style="-fx-background-color: red;" text="Retour" />
       <Button fx:id="askForUpdate" layoutX="328.0" layoutY="432.0" mnemonicParsing="false" onAction="#askForTaskCreation" prefHeight="25.0" prefWidth="101.0" style="-fx-background-color: green;" text="Modifier" />
-      <Label fx:id="updateTaskErrorMessage" layoutX="100.0" layoutY="54.0" prefHeight="17.0" prefWidth="305.0" />
+      <Label fx:id="LogMessage" layoutX="100.0" layoutY="54.0" prefHeight="17.0" prefWidth="305.0" />
       <Label fx:id="taskToUpdateTitle" layoutX="133.0" layoutY="17.0" prefHeight="40.0" prefWidth="305.0" textAlignment="CENTER">
          <font>
             <Font size="25.0" />
@@ -63,8 +63,8 @@
          </font>
       </Label>
       <TextField fx:id="updateTaskDuration" layoutX="100.0" layoutY="286.0" prefHeight="25.0" prefWidth="320.0" />
-      <TextField fx:id="updateTaskAuthor" layoutX="109.0" layoutY="326.0" prefHeight="25.0" prefWidth="320.0" />
-      <TextField fx:id="updateTaskAssignedTo" layoutX="132.0" layoutY="377.0" prefHeight="25.0" prefWidth="290.0" />
       <ComboBox fx:id="taskStatusCombobox" layoutX="150.0" layoutY="121.0" prefWidth="150.0" />
+      <ComboBox fx:id="updateTaskAssignedTo" layoutX="160.0" layoutY="380.0" prefWidth="150.0" />
+      <ComboBox fx:id="updateTaskAuthor" layoutX="160.0" layoutY="326.0" prefWidth="150.0" />
    </children>
 </Pane>

@@ -43,6 +43,7 @@ public class ProjectDetailController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
+        ProjectDetailController.this.getAllTasksController();
         DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
             @Override
             public void onCommit() {
@@ -56,6 +57,7 @@ public class ProjectDetailController implements Initializable {
     }
 
     public void getAllTasksController (){
+        String logs = "ProjectDetailController : getAllTasksController : ";
         TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
         ObservableList<Task>taskList = FXCollections.observableArrayList();
         try {
@@ -69,35 +71,17 @@ public class ProjectDetailController implements Initializable {
             taskColumnStatus.setCellValueFactory(new PropertyValueFactory<>("taskStatus"));
             taskColumnAssigned.setCellValueFactory(new PropertyValueFactory<>("assignedTo"));
             taskTableView.setItems(taskList);
+            logs = logs + "success";
+            LogWriter.writeLogs(logs);
         } catch (SQLException e) {
             e.printStackTrace();
+            logs = logs + "failed : " + e;
+            LogWriter.writeLogs(logs);
         }
     }
-/*
-    public void createTask(){
-        String title = newTaskTitle.getText();
-        String description = newTaskDescription.getText();
-        if(title != "" && description != ""){
-            Task p = new Task(title, description);
-            Connection connectDB = DatabaseConnection.getInstance().getDatabaseLink();
-            TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
-            try {
-                taskQueries.createTask(p);
-                createTaskErrorMessage.setText("Projet crée");
-                createTaskErrorMessage.setTextFill(Color.GREEN);
-            }
-            catch (SQLException e){
-                System.out.println(e);
-            }
-        }
-        else {
-            createTaskErrorMessage.setText("Veuillez renseigner tous les champs");
-            createTaskErrorMessage.setTextFill(Color.RED);
 
-        }
-    }
-*/
     public void deleteTask() {
+        String logs = "ProjectDetailController : deleteTask : ";
         if(taskTableView.getSelectionModel().getSelectedItem() != null){
             Data.task = taskTableView.getSelectionModel().getSelectedItem();
             TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
@@ -105,13 +89,16 @@ public class ProjectDetailController implements Initializable {
                 taskQueries.deleteTask();
                 logMessageTask.setText("Tâche suprimée");
                 logMessageTask.setTextFill(Color.GREEN);
+                logs = logs + "success";
+                LogWriter.writeLogs(logs);
             }
             catch (SQLException e){
                 System.out.println(e);
+                logs = logs + "failed : " + e;
             }
         }
         else {
-            logMessageTask.setText("Veuillez séléctionner un projet pour le supprimer");
+            logMessageTask.setText("Veuillez séléctionner une tâche pour la modifier");
             logMessageTask.setTextFill(Color.RED);
         }
     }
@@ -128,7 +115,7 @@ public class ProjectDetailController implements Initializable {
             updateWindow.show();
         }
         else {
-            logMessageTask.setText("Veuillez séléctionner un projet pour le modifier");
+            logMessageTask.setText("Veuillez séléctionner une tâche pour la modifier");
             logMessageTask.setTextFill(Color.RED);
         }
 

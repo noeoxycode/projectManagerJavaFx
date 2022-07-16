@@ -44,6 +44,7 @@ public class UpdateProjectSceneController implements Initializable {
     }
 
     public void askForUpdate(ActionEvent event) throws SQLException {
+        String logs = "UpdateProjectSceneController : ";
         ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
         String title = updateProjectTitle.getText();
         String description = updateProjectDescription.getText();
@@ -64,11 +65,13 @@ public class UpdateProjectSceneController implements Initializable {
                 updateProjectErrorMessage.setText("Projet modifié");
                 updateProjectErrorMessage.setTextFill(Color.GREEN);
             }*/
+            logs = logs + "success";
+            LogWriter.writeLogs(logs);
         }
         catch (SQLException e){
-            updateProjectErrorMessage.setText("Veuillez renseigner un ID valide");
-            updateProjectErrorMessage.setTextFill(Color.RED);
             System.out.println(e);
+            logs = logs + "failed : " + e;
+            LogWriter.writeLogs(logs);
         }
     }
 

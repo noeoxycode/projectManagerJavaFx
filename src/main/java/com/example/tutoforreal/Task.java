@@ -149,17 +149,27 @@ public class Task {
 */
     @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", taskStatus='" + taskStatus + '\'' +
-                ", description='" + description + '\'' +
-                ", publishedDate=" + publishedDate +
-                ", projectId=" + projectId +
-                ", deadline=" + deadline +
-                ", taskDuration=" + taskDuration +
-                ", author=" + author +
-                ", asignedTo=" + asignedTo +
-                '}';
+        return "Tâche : " +
+                "\n" +
+                "* Id : " + id +
+                "\n" +
+                "* Titre de la tâche : '" + title +
+                "\n" +
+                "* Status de la tâche : " + taskStatus +
+                "\n" +
+                "* Description : '" + description +
+                "\n" +
+                "* Date de publication : " + publishedDate +
+                "\n" +
+                "* Id du projet auquel appartient la tâche : " + projectId +
+                "\n" +
+                "* Deadline : " + deadline +
+                "\n" +
+                "* Durée estimée de la tâche : " + taskDuration +
+                "\n" +
+                "* Auteur : " + author +
+                "\n" +
+                "* Assignée à : " + asignedTo +
+                "\n" + "\n";
     }
 }

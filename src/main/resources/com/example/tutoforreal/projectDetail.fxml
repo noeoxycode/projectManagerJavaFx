@@ -13,17 +13,16 @@
          <font>
             <Font size="22.0" />
          </font></Label>
-      <TableView fx:id="taskTableView" layoutX="269.0" layoutY="27.0" prefHeight="301.0" prefWidth="519.0">
+      <TableView fx:id="taskTableView" layoutX="269.0" layoutY="56.0" prefHeight="301.0" prefWidth="519.0">
          <columns>
             <TableColumn fx:id="taskColumnTitle" prefWidth="228.0" text="TITLE" />
             <TableColumn fx:id="taskColumnStatus" prefWidth="114.0" text="TASK STATUS" />
             <TableColumn fx:id="taskColumnAssigned" prefWidth="176.0" text="ASSIGNED" />
          </columns>
       </TableView>
-      <Button layoutX="95.0" layoutY="304.0" mnemonicParsing="false" onAction="#getAllTasksController" prefHeight="32.0" prefWidth="84.0" text="Voir" />
       <Button fx:id="deleteTaskAsk" layoutX="59.0" layoutY="242.0" mnemonicParsing="false" onAction="#deleteTask" prefHeight="48.0" prefWidth="161.0" text="Supprimer une tâche" />
       <Button fx:id="createTask" layoutX="59.0" layoutY="109.0" mnemonicParsing="false" onAction="#createTaskWindow" prefHeight="48.0" prefWidth="161.0" text="Ajouter une tâche" />
       <Button fx:id="updateTaskButton" layoutX="59.0" layoutY="177.0" mnemonicParsing="false" onAction="#updateTaskWindow" prefHeight="48.0" prefWidth="161.0" text="Modifier une tâche" />
-      <Label fx:id="logMessageTask" layoutX="57.0" layoutY="80.0" prefHeight="18.0" prefWidth="350.0" />
+      <Label fx:id="logMessageTask" layoutX="332.0" layoutY="14.0" prefHeight="18.0" prefWidth="353.0" />
    </children>
 </Pane>

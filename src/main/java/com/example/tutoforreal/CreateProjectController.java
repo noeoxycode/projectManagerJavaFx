@@ -8,7 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 import java.net.URL;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
@@ -29,6 +28,7 @@ public class CreateProjectController implements Initializable {
 
 
     public void createProject(){
+        String logs = "CreateProjectController createProject : ";
         String title = newProjectTitle.getText();
         String description = newProjectDescription.getText();
         if(title != "" && description != ""){
@@ -38,9 +38,13 @@ public class CreateProjectController implements Initializable {
                 projectQueries.createProject(p);
                 createProjectErrorMessage.setText("Projet crée");
                 createProjectErrorMessage.setTextFill(Color.GREEN);
+                logs = logs + "sucess";
+                LogWriter.writeLogs(logs);
             }
             catch (SQLException e){
                 System.out.println(e);
+                logs = logs + "failed : " + e;
+                LogWriter.writeLogs(logs);
             }
         }
         else {

@@ -38,6 +38,34 @@ public class ProjectQueries {
         return projectList;
     }
 
+    public ArrayList<User> getAllUsers() throws SQLException {
+        ArrayList<User> userList = new ArrayList<User>();
+        String sql = "SELECT * FROM user";
+        PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
+        ResultSet result = pstmt.executeQuery();
+        while (result.next()){
+            String name =result.getString("name");
+            int id = result.getInt("id");
+            User newUser = new User(id, name);
+            userList.add(newUser);
+        }
+        return userList;
+    }
+
+    public void addUser(String user) throws SQLException {
+        String sql = "insert into user values (null, ?)";
+        PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
+        pstmt.setString(1, user);
+        pstmt.executeUpdate();
+    }
+
+    public void deleteUser(int id) throws SQLException {
+        String sql = "delete from user where id == ?";
+        PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
+        pstmt.setInt(1, id);
+        pstmt.executeUpdate();
+    }
+
     public void createProject(Project p) throws SQLException {
         String sql = "insert into project values (null, ?, ?)";
         PreparedStatement pstmt = this.connection.getDatabaseLink().prepareStatement(sql);
