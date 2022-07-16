@@ -13,6 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteCommitListener;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -36,20 +37,34 @@ public class UsersManager implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
-        UsersManager.this.getAllUsers();
-        DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
-            @Override
-            public void onCommit() {
-                UsersManager.this.getAllUsers();
-            }
-            @Override
-            public void onRollback() {
+        try {
+            UsersManager.this.getAllUsers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
+                @Override
+                public void onCommit() {
+                    try {
+                        UsersManager.this.getAllUsers();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onRollback() {
 
-            }
-        });
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void getAllUsers (){
+    public void getAllUsers () throws IOException {
         String logs = "Usermanager getAllUsers : ";
         ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
         ObservableList<User> usersList = FXCollections.observableArrayList();
@@ -71,7 +86,7 @@ public class UsersManager implements Initializable {
         }
     }
 
-    public void addUser() throws SQLException {
+    public void addUser() throws SQLException, IOException {
         String logs = "UserManager addUser : ";
         String p = newUserName.getText();
         ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
@@ -98,7 +113,7 @@ public class UsersManager implements Initializable {
 
     }
 
-    public void deleteUser() throws SQLException {
+    public void deleteUser() throws SQLException, IOException {
         String logs = "UserManager deleteUser : ";
         User user = tableUsers.getSelectionModel().getSelectedItem();
         ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());

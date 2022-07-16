@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -53,7 +55,14 @@ public class UpdateTaskSceneController implements Initializable {
     public void initialize(URL location, ResourceBundle ressources) {
         ArrayList<String> users = null;
         ArrayList<TaskStatus> status = null;
-        TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
+        TaskQueries taskQueries = null;
+        try {
+            taskQueries = new TaskQueries(DatabaseConnection.getInstance());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         try {
             users = taskQueries.getAllUsers();
             status = taskQueries.getAllTaskStatus();
@@ -94,7 +103,7 @@ public class UpdateTaskSceneController implements Initializable {
         }
     }
 
-    public void askForUpdate(ActionEvent event) {
+    public void askForUpdate(ActionEvent event) throws IOException {
         String logs = "UpdateTaskSceneController : askForUpdate : ";
         int cptModif = 0;
         TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());

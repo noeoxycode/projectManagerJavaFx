@@ -9,12 +9,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteCommitListener;
 
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -43,20 +44,36 @@ public class ProjectDetailController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
-        ProjectDetailController.this.getAllTasksController();
-        DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
-            @Override
-            public void onCommit() {
-                ProjectDetailController.this.getAllTasksController();
-            }
-            @Override
-            public void onRollback() {
+        try {
+            ProjectDetailController.this.getAllTasksController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
+                @Override
+                public void onCommit() {
+                    try {
+                        ProjectDetailController.this.getAllTasksController();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onRollback() {
 
-            }
-        });
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void getAllTasksController (){
+    public void getAllTasksController () throws IOException {
         String logs = "ProjectDetailController : getAllTasksController : ";
         TaskQueries taskQueries = new TaskQueries(DatabaseConnection.getInstance());
         ObservableList<Task>taskList = FXCollections.observableArrayList();
@@ -80,7 +97,7 @@ public class ProjectDetailController implements Initializable {
         }
     }
 
-    public void deleteTask() {
+    public void deleteTask() throws IOException {
         String logs = "ProjectDetailController : deleteTask : ";
         if(taskTableView.getSelectionModel().getSelectedItem() != null){
             Data.task = taskTableView.getSelectionModel().getSelectedItem();
@@ -112,6 +129,10 @@ public class ProjectDetailController implements Initializable {
             Scene updateScene = new Scene(fxmlLoader.load(), 450, 550);
             Stage updateWindow = new Stage();
             updateWindow.setScene(updateScene);
+            File file = new File("imgLink.txt");
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String logoLink = br.readLine();
+            updateWindow.getIcons().add(new Image(logoLink));
             updateWindow.show();
         }
         else {
@@ -126,6 +147,10 @@ public class ProjectDetailController implements Initializable {
         Scene updateScene = new Scene(fxmlLoader.load(), 450, 500);
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
+        File file = new File("imgLink.txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String logoLink = br.readLine();
+        updateWindow.getIcons().add(new Image(logoLink));
         updateWindow.show();
     }
 

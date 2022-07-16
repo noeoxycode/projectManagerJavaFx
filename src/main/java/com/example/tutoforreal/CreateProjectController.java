@@ -7,6 +7,8 @@ import javafx.scene.control.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
@@ -27,7 +29,7 @@ public class CreateProjectController implements Initializable {
     }
 
 
-    public void createProject(){
+    public void createProject() throws IOException {
         String logs = "CreateProjectController createProject : ";
         String title = newProjectTitle.getText();
         String description = newProjectDescription.getText();

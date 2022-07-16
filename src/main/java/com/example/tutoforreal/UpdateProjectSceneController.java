@@ -9,10 +9,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteCommitListener;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
@@ -43,7 +47,7 @@ public class UpdateProjectSceneController implements Initializable {
             updateProjectDescription.setText(Data.project.getDescription());
     }
 
-    public void askForUpdate(ActionEvent event) throws SQLException {
+    public void askForUpdate(ActionEvent event) throws SQLException, IOException {
         String logs = "UpdateProjectSceneController : ";
         ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
         String title = updateProjectTitle.getText();
@@ -85,6 +89,10 @@ public class UpdateProjectSceneController implements Initializable {
         Scene updateScene = new Scene(fxmlLoader.load(), 812, 400);
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
+        File file = new File("imgLink.txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String logoLink = br.readLine();
+        updateWindow.getIcons().add(new Image(logoLink));
         updateWindow.show();
     }
 }

@@ -10,14 +10,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteCommitListener;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -42,20 +41,36 @@ public class Controller implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle ressources) {
-        Controller.this.getAllProjectsController();
-        DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
-            @Override
-            public void onCommit() {
-                Controller.this.getAllProjectsController();
-            }
-            @Override
-            public void onRollback() {
+        try {
+            Controller.this.getAllProjectsController();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            DatabaseConnection.getInstance().getDatabaseLink().addCommitListener(new SQLiteCommitListener() {
+                @Override
+                public void onCommit() {
+                    try {
+                        Controller.this.getAllProjectsController();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                @Override
+                public void onRollback() {
 
-            }
-        });
+                }
+            });
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void getAllProjectsController (){
+    public void getAllProjectsController () throws IOException {
         String logs = "Controller getAllProjectsController : ";
             ProjectQueries projectQueries = new ProjectQueries(DatabaseConnection.getInstance());
             ObservableList<Project>projectList = FXCollections.observableArrayList();
@@ -78,7 +93,7 @@ public class Controller implements Initializable {
             }
     }
 
-    public void deleteProject() {
+    public void deleteProject() throws IOException {
         String logs = "Controller deleteProject : ";
         if(projectTableView.getSelectionModel().getSelectedItem() != null){
             Project p = projectTableView.getSelectionModel().getSelectedItem();
@@ -112,6 +127,10 @@ public class Controller implements Initializable {
             Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
             Stage updateWindow = new Stage();
             updateWindow.setScene(updateScene);
+            File file = new File("imgLink.txt");
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String logoLink = br.readLine();
+            updateWindow.getIcons().add(new Image(logoLink));
             updateWindow.show();
         }
         else {
@@ -125,6 +144,10 @@ public class Controller implements Initializable {
         Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
+        File file = new File("imgLink.txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String logoLink = br.readLine();
+        updateWindow.getIcons().add(new Image(logoLink));
         updateWindow.show();
     }
 
@@ -133,6 +156,10 @@ public class Controller implements Initializable {
         Scene updateScene = new Scene(fxmlLoader.load(), 450, 300);
         Stage updateWindow = new Stage();
         updateWindow.setScene(updateScene);
+        File file = new File("imgLink.txt");
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        String logoLink = br.readLine();
+        updateWindow.getIcons().add(new Image(logoLink));
         updateWindow.show();
     }
 
@@ -179,7 +206,7 @@ public class Controller implements Initializable {
                 logs = logs + "failed " + e;
                 LogWriter.writeLogs(logs);
             }
-        } catch (SQLException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
             logs = logs + "failed " + e;
             LogWriter.writeLogs(logs);
