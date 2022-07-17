@@ -26,7 +26,7 @@ public class LogWriter {
         }
     }
 
-    static void writeLogs(String content){
+    public static void writeLogs(String content){
         try {
             File f1 = new File("logs.txt");
             if(!f1.exists()) {
