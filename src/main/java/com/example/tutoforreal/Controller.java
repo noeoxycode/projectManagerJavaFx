@@ -173,4 +173,15 @@ public class Controller implements Initializable {
         PdfGenerator generator = new PdfGenerator();
         generator.creatingPdf();
     }
+
+    public void tooglePlugin() throws Exception {
+        if(Data.plugin == null){
+            Data.plugin = PluginConnector.start();
+        }
+        else {
+            PluginConnector.closePlugin();
+            Data.plugin = null;
+        }
+
+    }
 }
