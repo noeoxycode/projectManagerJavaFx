@@ -1,1 +1,1 @@
-C:\Users\noe\IdeaProjects\projectManagerJavaFx\lolLogo.png
+C:\Users\noe\IdeaProjects\tutoForReal\src\main\java\com\example\tutoforreal\lolLogo.png
